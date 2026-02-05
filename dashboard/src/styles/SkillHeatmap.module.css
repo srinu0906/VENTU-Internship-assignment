@@ -1,0 +1,49 @@
+.heatTable {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed; 
+  box-shadow: 0 5px 25px skyblue;  /* IMPORTANT */
+}
+
+.heatTable th {
+  height: 80px;
+  width: 80px;
+  background: #1c1c1c;
+  color: white;
+  font-size: 13px;
+  padding: 6px;
+  border: 1px solid #fff;
+  text-align: center;
+}
+
+.heatTable td {
+  border: 1px solid #fff;
+}
+
+/* First column fixed width */
+.nameCell {
+  width: 80px;
+  background: #f3f3f3;
+  font-weight: 600;
+  padding-left: 25px;
+  text-align: left;
+}
+
+/* ALL heat cells same size */
+.heatCell {
+  width: 80px;
+  height: 80px;
+  padding: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 45px;   /* centers number vertically */
+}
+.rowsSelect {
+  width: 80px;
+}
+
+.mantine-Select-input {
+  text-align: center;
+  font-weight: 600;
+}

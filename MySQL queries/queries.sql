@@ -20,32 +20,57 @@ create table evaluations (
     foreign key(candidate_id) references candidates(id)
 );
 
-create table rankings(
-	candidate_id int primary key,
-    ranking int,
-    foreign key(candidate_id) references candidates(id)
+CREATE TABLE rankings (
+    candidate_id INT PRIMARY KEY,
+    total_score INT,
+    ranking INT,
+    FOREIGN KEY (candidate_id) REFERENCES candidates(id)
 );
 
--- Creating trigger
 DELIMITER $$
 
-create trigger update_rankings after insert on evaluations
-for each row
-begin
-	
-    insert into rankings(candidate_id,ranking) 
-    values (new.candidate_id,0)
-    on duplicate key update  ranking = ranking;
-    
-    set @r = 0;
-    update rankings r 
-    join(
-		select candidate_id,(@r := @r + 1) as new_rank
-        from evaluations 
-        order by (crisis_management + sustainability + team_motivation) desc
-	) ranked
-    on r.candidate_id = ranked.candidate_id
-    set r.ranking = ranked.new_rank;
-end$$
 
+--  Procedure for compting ranks
+CREATE PROCEDURE recompute_rankings()
+BEGIN
+    DELETE FROM rankings;
+
+    INSERT INTO rankings (candidate_id, total_score, ranking)
+    SELECT
+        candidate_id,
+        total_score,
+        DENSE_RANK() OVER (ORDER BY total_score DESC)
+    FROM (
+        SELECT
+            candidate_id,
+            (crisis_management + sustainability + team_motivation) AS total_score
+        FROM evaluations
+    ) t;
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+
+-- Trigger for insert
+CREATE TRIGGER trg_eval_after_insert
+AFTER INSERT ON evaluations
+FOR EACH ROW
+BEGIN
+    CALL recompute_rankings();
+END$$
+
+DELIMITER ;
+
+
+-- Trigger for update
+DELIMITER $$
+CREATE TRIGGER trg_eval_after_update
+AFTER UPDATE ON evaluations
+FOR EACH ROW
+BEGIN
+    CALL recompute_rankings();
+END$$
 DELIMITER ;

@@ -1,0 +1,46 @@
+.card {
+  border: 1px solid #eee;
+  padding: 14px;
+
+  height: 320px;                 /* SAME SIZE FOR ALL */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 8px 18px black;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px skyblue;
+}
+
+.line {
+  margin-top: 4px;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* white-space: nowrap;          keeps layout tight */
+}
+
+.scores {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.metric {
+  margin-top: 6px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+.searchInput {
+  width: 180px;
+}
+
+.rowsSelect {
+  width: 120px;
+}
+
